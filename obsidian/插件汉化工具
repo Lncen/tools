@@ -1,0 +1,98 @@
+import re
+import os
+
+def extract_method_args(file_path):
+    # 输入验证
+    if not isinstance(file_path, str) or not os.path.isfile(file_path):
+        print("请输入有效的文件路径")
+        return []
+
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+
+        # 支持 .setName(...) 和其他方法，支持单/双引号，忽略换行和空格
+        method_pattern = re.compile(
+            r'\.(?:setName|append|setButtonText|addOption|setDesc|appendText)'
+            r'\s*\(\s*([\'"])(.*?)\1\s*\)',
+            re.DOTALL
+        )
+        matches = method_pattern.findall(content)
+        res = [f'{quote}{arg}{quote}' for quote, arg in matches]
+
+        # 统一处理单引号和双引号中的字符串内容
+        string_pattern = re.compile(r'(["\'])(.*?)(?<!\\)\1', re.DOTALL)
+
+        results = []
+        for arg in res:
+            inner_matches = string_pattern.findall(arg)
+            if not inner_matches:
+                continue  # 跳过非字符串参数
+            for _, ma in inner_matches:
+                if len(ma) > 8:
+                    results.append(ma)
+        return results
+
+    except Exception as e:
+        # 可选：记录日志
+        # import logging; logging.exception(e)
+        return []
+
+
+def translate_and_replace(file_path,translations):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+
+            # 逐个替换翻译
+            for en, cn in translations.items():
+                # 使用 re.escape 确保特殊字符被正确处理
+                pattern = re.escape(en)
+                content = re.sub(pattern, cn, content)
+
+        # 写入新文件
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.write(content)
+
+        print("翻译替换完成！结果已保存到:", file_path)
+
+    except FileNotFoundError:
+        print(f"文件未找到: {file_path}")
+    except Exception as e:
+        print(f"发生错误: {e}")
+
+
+if __name__ == '__main__':
+    '''
+    提示词：中文不要翻译为英文,只需要把英文翻译了返回单行字典格式就可以了。 格式为{"英文“：”中文“}
+    '''
+
+    file_path = r"E:\59530\Documents\知识库\Notes\.obsidian\plugins\templater-obsidian\main.js"
+
+
+
+    # 翻译对照表（英文:中文）
+    translations = {
+    "Class extends value ": "类继承的值 ",
+    " is not a constructor or null": "不是构造函数或null",
+    "tp.file.cursor": "tp.file.cursor",
+    " after inserting a template.": "在插入模板后。",
+    "桌面端的语法高亮显示": "桌面端的语法高亮显示",
+    "移动端的语法高亮显示": "移动端的语法高亮显示"
+}
+
+
+
+    # a = input("你要干啥：\n   1:提取英文\n   2:开始执行汉化\n  3.按Q退出")
+    # if a == "1":
+    #     # 提取需要翻译的参数
+    #     method_args = extract_method_args(file_path)
+    #     # print("待翻译参数：\n", method_args)
+    #     print('找个ai帮忙翻译吧\n 提示词是：')
+    #     print('只需要把英文翻译了返回字典格式就可以了,注意：不要把中文翻译为英文。 格式为{}\n{}'.format({"英文":"中文"},method_args,))
+    # elif a == "2":
+    #     # 执行替换
+    #     translate_and_replace(file_path, translations)
+    # elif a == "Q":
+    #     print("已退出")
+    #     exit()
