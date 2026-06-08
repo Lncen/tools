@@ -1,0 +1,149 @@
+import re
+import os
+import tkinter as tk
+from tkinter import filedialog
+import ast
+
+class TranslateObsidianPlugins:
+    """
+    obsidian插件汉化
+    """
+    def __init__(self):
+        self.file_path = None
+        self.text = '\n提示词：\n\n仅翻译英文部分为中文，保持中文原文不变。请以单行字典格式返回结果。 格式为{}\n{}\n'
+
+    def select_file(self):
+        # 隐藏主窗口
+        root = tk.Tk()
+        root.withdraw()  # 隐藏空白的 Tk 窗口
+        print('>>> 请选择你的笔记文件夹下的 .obsidian/plugins/*/main.js 文件')
+        # 打开文件选择对话框，限制只能选择 .obsidian/plugins/*/main.js 文件
+        file_path = filedialog.askopenfilename(
+            title="选择一个插件的 main.js 文件",
+            filetypes=[("JavaScript 文件", "*.js")],
+            # initialdir=os.path.expanduser("~/.obsidian/"),  # 默认打开目录
+        )
+
+        # 验证文件路径是否符合要求
+        if file_path:
+            # 检查路径是否包含 .obsidian/plugins 并且文件名为 main.js
+
+            if (
+                ".obsidian" in file_path
+                and "plugins" in file_path
+                and os.path.basename(file_path) == "main.js"
+            ):
+                print("您选择的文件是:", file_path)
+                return file_path
+            else:
+                print("请选择 .obsidian/plugins/ 目录下某个插件文件夹中的 main.js 文件")
+                return None
+        else:
+            print("未选择任何文件")
+            return None
+
+    def extract_method_args(self):
+        """
+        提取需要翻译的字段
+        """
+        # 输入验证
+        if not isinstance(self.file_path, str) or not os.path.isfile(self.file_path):
+            print("请输入有效的文件路径")
+            return []
+
+        try:
+            with open(self.file_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+
+            # 支持 .setName(...) 和其他方法，支持单/双引号，忽略换行和空格
+            method_pattern = re.compile(
+                r"\.(?:setName|append|setButtonText|addOption|setDesc|appendText)"
+                r'\s*\(\s*([\'"])(.*?)\1\s*\)',
+                re.DOTALL,
+            )
+            matches = method_pattern.findall(content)
+            res = [f'{quote}{arg}{quote}' for quote, arg in matches]
+
+            # 统一处理单引号和双引号中的字符串内容
+            string_pattern = re.compile(r'(["\'])(.*?)(?<!\\)\1', re.DOTALL)
+
+            results = []
+            for arg in res:
+                inner_matches = string_pattern.findall(arg)
+                inner_matches = inner_matches[0][1]
+
+                if len(inner_matches) < 8:
+                    continue
+
+                if not inner_matches:
+                    continue  # 跳过非字符串参数
+
+                if '<' in inner_matches or '(' in inner_matches or '{' in inner_matches:
+                    continue
+                results.append(inner_matches)
+            return results
+
+        except Exception as e:
+            # 可选：记录日志
+            # import logging; logging.exception(e)
+            return []
+
+    def translate_and_replace(self, translation):
+        """
+        替换需要翻译的内容
+        translations : 翻译后的对照表
+        """
+        if self.file_path is None:
+            return
+        try:
+            with open(self.file_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+
+                # 逐个替换翻译
+                for en, cn in translation.items():
+                    if '<' in en or '>' in en:
+                        continue
+                    # 使用 re.escape 确保特殊字符被正确处理
+                    pattern = re.escape(en)
+                    content = re.sub(pattern, cn, content)
+
+            # 写入新文件
+            with open(self.file_path, 'w', encoding='utf-8') as file:
+                file.write(content)
+
+            print("翻译替换完成！结果已保存到:", self.file_path)
+
+        except FileNotFoundError:
+            print(f"文件未找到: {self.file_path}")
+        except Exception as e:
+            print(f"发生错误: {e}")
+
+    def run(self):
+        self.file_path = self.select_file()
+        if not self.file_path:
+            return
+        data = self.extract_method_args()
+        if not data:
+            print("没有需要翻译的内容")
+            return
+        style  = '{"英文“：”中文“}'
+        text = self.text.format(style, data)
+        print(text)
+        translation_input = input("请输入翻译对照表（字典格式）：")
+
+        try:
+            # 使用 ast.literal_eval 安全地将字符串转换为字典
+            translation = ast.literal_eval(translation_input)
+            if not isinstance(translation, dict):
+                raise ValueError("输入的不是字典格式")
+            # 执行替换
+            self.translate_and_replace(translation)
+        except Exception as e:
+            print(f"输入格式错误: {e}")
+            return
+
+
+
+if __name__ == '__main__':
+    top = TranslateObsidianPlugins()
+    top.run()
