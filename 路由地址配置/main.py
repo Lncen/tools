@@ -122,7 +122,6 @@ def main(num_groups:int, file_path, write_file_path):
     if network_data:
         print("文件读取成功!\n")
         print("数量:",data_len)
-        # print("基本信息:",split_list_into_groups(network_data,9))
         write_to_file(network_data, num_groups, write_file_path)
 
         # 显示基本信息
