@@ -1,7 +1,6 @@
 import json
 import os
 import random
-from email.mime import text
 
 
 def read_json_file(file_path):
