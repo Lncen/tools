@@ -1,4 +1,3 @@
-菲菲姐姐-抖音官方达人团长: 6.66 复制打开抖音，看看【菲菲姐姐的作品】阳光码头199四人餐！  https://v.douyin.com/vKQb4Pj1AEg/ e@O.KJ :1pm 06/07 GIV:/
-菲菲姐姐-抖音官方达人团长: 6.46 复制打开抖音，看看【菲菲姐姐的作品】南湖万达京鼎南门开业预售！  https://v.douyin.com/fUj8Et43FRQ/ :3pm 04/12 e@O.Kw EHI:/
-菲菲姐姐-抖音官方达人团长: 8.23 复制打开抖音，看看【菲菲姐姐的作品】瑞幸99.9元十次啦.  https://v.douyin.com/92wsLPOj9Y8/ mdA:/ c@N.JI 10/26 :8pm
-菲菲姐姐-抖音官方达人团长: 4.69 复制打开抖音，看看【菲菲姐姐的作品】崇福地锅江湖吃地锅鸡送榴莲啦！  https://v.douyin.com/flrGkTnw8Xo/ Q@x.sE 11/15 :7pm eod:/
+菲菲姐姐-抖音官方达人团长: 6.61 复制打开抖音，看看【菲菲姐姐的作品】瑞幸99.9十次卡回归！这次25款饮料可以选择！  https://v.douyin.com/LmjSnsS3leM/ 09/10 LJI:/ :0pm Z@z.gb
+菲菲姐姐-抖音官方达人团长: 3.35 复制打开抖音，看看【菲菲姐姐的作品】端午节买粽子就到五芳斋！  https://v.douyin.com/5Tsbp5ua9go/ 12/05 :7pm SYM:/ o@D.UY
+菲菲姐姐-抖音官方达人团长: 3.38 复制打开抖音，看看【菲菲姐姐的作品】端午节买粽子就来五芳斋# 五芳斋抖音团购 # 五芳... https://v.douyin.com/K5GTCcDG3QA/ iPX:/ :3pm 05/27 J@v.se:7pm eod:/

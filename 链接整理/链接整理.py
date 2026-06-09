@@ -95,10 +95,10 @@ def main(z_config, s_config, f_config):
     total_cost = z_total + s_total + f_total
 
     print(f"\n成本计算:")
-    # print(f"Z: {z_config[0]} × {z_config[1]} = {z_total:.2f}")
-    # print(f"S: {s_config[0]} × {s_config[1]} = {s_total:.2f}")
-    # print(f"F: {f_config[0]} × {f_config[1]} = {f_total:.2f}")
-    print(f"\n{z_total:.2f} + {s_total:.2f} + {f_total:.2f} = {total_cost:.2f}")
+    zx = f"{z_config[0]}×{z_config[1]}"
+    sx = f"{s_config[0]}×{s_config[1]}"
+    fx = f"{f_config[0]}×{f_config[1]}"
+    print(f"\n{zx} + {sx} + {fx} = {total_cost:.2f}")
 
     final_result = total_cost * num
     print(f"{total_cost:.2f} × {num} = {final_result:.2f}")
