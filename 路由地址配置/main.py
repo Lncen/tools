@@ -1,6 +1,7 @@
 import json
 import os
 import random
+from email.mime import text
 
 
 def read_json_file(file_path):
@@ -34,7 +35,7 @@ def read_json_file(file_path):
 
 def set_ip(id:int, ips:str):
     ip_str = ",".join(ips)
-    s = f"id={id} enabled=yes comment= type=0 nexthop= interface=l2tp00000000 mode=0 src_addr={ip_str} dst_addr= protocol=any src_port= dst_port= dst_type=0 area_code= iface_band=0 week=1234567 time=00:00-23:59\n"
+    s = f"id={id} enabled=yes comment= type=0 nexthop= interface=l2tp00000000 mode=0 src_addr={ip_str} dst_addr= protocol=any src_port= dst_port= dst_type=0 area_code= iface_band=0 week=1234567 time=00:00-23:59"
     return s
 
 def split_list_into_groups(data: list, num_groups: int) -> list:
@@ -90,10 +91,10 @@ def write_to_file(network_data: list, num_groups, output_file: str):
         for i in range(len(ip_list)):
             x = ip_list[i]
             text = set_ip(i+1, x)
-            f.write(text)
+            f.write(text + '\n')
     print(f"已写入文件: {output_file}")
 
-def main(num_groups:int, file_path: str, write_file_path: str):
+def main(num_groups:int, file_path, write_file_path):
     if num_groups <= 0:
         raise ValueError("组数必须大于0")
 
@@ -132,8 +133,6 @@ def main(num_groups:int, file_path: str, write_file_path: str):
 if __name__ == "__main__":
     # JSON文件路径
     base_path = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(base_path, "ip.json")  # 当前目录下ip.json 来自AP--> 无线端网页数据
+    file_path = os.path.join(base_path, "ip.json")
     write_file_path = os.path.join(base_path, "1_路由分流设置.txt")
-
-    num_groups = 9  # 线路数量
-    main(num_groups, file_path, write_file_path)
+    main(9, file_path, write_file_path)
