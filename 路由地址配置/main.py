@@ -92,7 +92,7 @@ def write_to_file(network_data: list, num_groups, output_file: str):
             x = ip_list[i]
             text = set_ip(i+1, x)
             f.write(text + '\n')
-
+    print(f"已写入文件: {output_file}")
 
 def main(num_groups:int, file_path, write_file_path):
     if num_groups <= 0:
@@ -106,7 +106,18 @@ def main(num_groups:int, file_path, write_file_path):
 
     data_len = len(network_data)
     if num_groups > data_len:
-        raise ValueError("组数不能大于列表长度")
+        raise ValueError("""
+        组数不能大于列表长度, 
+        请检查输入的json文件数据,应该是这样的：
+         {
+            "Result": 30000,
+            "ErrMsg": "Success",
+            "Data": {
+                "data": [...],
+                "total": 78
+            }
+        }
+        """)
 
     if network_data:
         print("文件读取成功!\n")
@@ -122,6 +133,7 @@ def main(num_groups:int, file_path, write_file_path):
 
 if __name__ == "__main__":
     # JSON文件路径
-    file_path = "D:\\code\\tools\\路由地址配置\\ip.json"
-    write_file_path = "D:\\code\\tools\\路由地址配置\\1_路由分流设置.txt"
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(base_path, "ip.json")
+    write_file_path = os.path.join(base_path, "1_路由分流设置.txt")
     main(9, file_path, write_file_path)
