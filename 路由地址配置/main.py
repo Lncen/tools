@@ -32,10 +32,15 @@ def read_json_file(file_path):
         print(f"未知错误: {e}")
         return None
 
-def set_ip(id:int, ips:str):
+def set_ip(id:int, ips, interface:str='l2tp00000000', mode:int=0):
     ip_str = ",".join(ips)
-    s = f"id={id} enabled=yes comment= type=0 nexthop= interface=l2tp00000000 mode=0 src_addr={ip_str} dst_addr= protocol=any src_port= dst_port= dst_type=0 area_code= iface_band=0 week=1234567 time=00:00-23:59"
+    s = f"id={id} enabled=yes comment= type=0 nexthop= interface={interface} mode={mode} src_addr={ip_str} dst_addr= protocol=any src_port= dst_port= dst_type=0 area_code= iface_band=0 week=1234567 time=00:00-23:59"
     return s
+
+def set_ip_all(id):
+    """防止IP变化 这里设置全局分流兜底"""
+    ips = ["10.0.0.11-10.0.0.255","10.0.10.11-10.0.10.255"]
+    return set_ip(id,ips,'l2tp111111111', mode=1)
 
 def split_list_into_groups(data: list, num_groups: int) -> list:
     """
@@ -91,6 +96,9 @@ def write_to_file(network_data: list, num_groups, output_file: str):
             x = ip_list[i]
             text = set_ip(i+1, x)
             f.write(text + '\n')
+        all_text = set_ip_all(num_groups + 1)
+        if all_text:
+            f.write(all_text + '\n')
     print(f"已写入文件: {output_file}")
 
 def main(num_groups:int, file_path, write_file_path):
@@ -131,7 +139,8 @@ def main(num_groups:int, file_path, write_file_path):
 
 if __name__ == "__main__":
     # JSON文件路径
+    link = 8 # 线路数量
     base_path = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(base_path, "ip.json")
     write_file_path = os.path.join(base_path, "1_路由分流设置.txt")
-    main(9, file_path, write_file_path)
+    main(link, file_path, write_file_path)

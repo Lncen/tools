@@ -94,7 +94,7 @@ def main(z_config, s_config, f_config):
 
     total_cost = z_total + s_total + f_total
 
-    print(f"\n成本计算:")
+    print(f"\n售价计算:")
     zx = f"{z_config[0]}×{z_config[1]}"
     sx = f"{s_config[0]}×{s_config[1]}"
     fx = f"{f_config[0]}×{f_config[1]}"
@@ -131,7 +131,7 @@ def get_input(prompt, default):
 
 if __name__ == "__main__":
     # 默认配置 [数量, 单价]
-    default_z = [100, 0.006]
+    default_z = [100, 0.005]
     default_s = [50, 0.02]
     default_f = [100, 0.003]
 
@@ -139,6 +139,8 @@ if __name__ == "__main__":
         z = get_input("z", default_z)
         s = get_input("s", default_s)
         f = get_input("f", default_f)
+
+
 
         main(z, s, f)
     except KeyboardInterrupt:
